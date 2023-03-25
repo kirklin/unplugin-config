@@ -7,10 +7,18 @@ import dotenv from "dotenv";
 import type { BuildConfigOptions, Options } from "../types";
 import { APP_NAME, ENV_CONFIG_PREFIX, GLOB_CONFIG_FILE_NAME, OUTPUT_DIR, PLUGIN_NAME } from "./constants";
 
-export function getAppConfigFileName(options?: Options): string {
-  const shortName: string = options?.appName || APP_NAME;
-  return `__PRODUCTION__${shortName.replace(/-/g, "__")}__CONF__`.toUpperCase().replace(/\s/g, "");
+function sanitizeString(str: string): string {
+  // Replace invalid characters with an empty string
+  const sanitized = str.replace(/[^\w.-]/g, "");
+  // Trim any remaining whitespace
+  return sanitized.trim();
 }
+
+export function getAppConfigFileName(options?: Options): string {
+  const shortName: string = sanitizeString((options?.appName || APP_NAME).replace(/-/g, "__"));
+  return `__PRODUCTION__${shortName}__CONF__`.toUpperCase();
+}
+
 export function runBuildConfig(options?: Options) {
   const config = getEnvConfig(options?.envConfigPrefix);
   logger.info(`[${PLUGIN_NAME}]runBuildConfig: ${JSON.stringify(config)}`);
