@@ -2,22 +2,15 @@
 
 [![NPM version](https://img.shields.io/npm/v/unplugin-config?color=a1b858&label=)](https://www.npmjs.com/package/unplugin-config)
 
-Starter template for [unplugin](https://github.com/unjs/unplugin).
+A tool that generates configuration files for web applications, allowing customization of global variables that can be externally modified without the need for repackaging.
 
-## Template Usage
-
-To use this template, clone it down using:
-
-```bash
-npx degit kirklin/unplugin-config my-unplugin
-```
-
-And do a global replace of `unplugin-config` with your plugin name.
-
-Then you can start developing your unplugin 🔥
-
-To test your plugin, run: `pnpm run dev`
-To release a new version, run: `pnpm run release`
+##### Features
+- ✨ Generates configuration files for web applications.
+- 🔨 Allows customization of global variables.
+- 🌈 Built-in support for dotenv, enabling parsing of environment variables starting with a specified prefix.
+- 🚀 Supports packaging with Vite, Webpack, Rollup, and more.
+- 🎉 Tree-shakable, generates only the configuration file required for the application.
+- 🌟 Compatible with TypeScript.
 
 ## Install
 
@@ -121,6 +114,22 @@ build({
 ```
 
 <br></details>
+
+## Configuration
+
+The options object contains the following properties:
+
+- disabledConfig: A boolean value that determines whether the configuration file is generated.
+- globConfigFileName: The name of the configuration file.
+- outputDir: The directory where the configuration file is generated.
+- appName: The name of the application.
+- envConfigPrefix: The prefix for the environment variables to be parsed.
+
+To customize the global variables, create a configuration file with the required variables and save it in the output directory. The variables can be modified externally without the need for repackaging.
+
+## Example
+
+[kirklin/celeris-admin: Celeris Admin is a free and open-source middle and back-end template using the latest technology such as Vue3, Vite, TypeScript, Naive UI and monorepo for fast and efficient development. (github.com)](https://github.com/kirklin/celeris-admin)
 
 
 ## License
