@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment */
 import type { Options } from "./types";
 import unplugin from ".";
 export default function (options: Options = {}, nuxt: any) {

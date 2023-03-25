@@ -1,7 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "dev": "nodemon -w '../src/**/*.ts' -e .ts -x vite"
+    "dev": "nodemon -w '../src/**/*.ts' -e .ts -x vite",
+    "build": "nodemon -w '../src/**/*.ts' -e .ts -x vite build"
   },
   "devDependencies": {
     "vite": "^4.2.1",

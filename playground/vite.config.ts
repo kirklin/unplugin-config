@@ -5,6 +5,12 @@ import Unplugin from "../src/vite";
 export default defineConfig({
   plugins: [
     Inspect(),
-    Unplugin(),
+    Unplugin({
+      disabledConfig: false,
+      globConfigFileName: "_app.config.js",
+      outputDir: "dist",
+      appName: "Celeris Admin",
+      envConfigPrefix: "VITE_GLOB_",
+    }),
   ],
 });
