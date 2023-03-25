@@ -6,16 +6,10 @@ import { cyan, gray, green, red } from "picocolors";
 import dotenv from "dotenv";
 import type { BuildConfigOptions, Options } from "../types";
 import { APP_NAME, ENV_CONFIG_PREFIX, GLOB_CONFIG_FILE_NAME, OUTPUT_DIR, PLUGIN_NAME } from "./constants";
-
-function sanitizeString(str: string): string {
-  // Replace invalid characters with an empty string
-  const sanitized = str.replace(/[^\w.-]/g, "");
-  // Trim any remaining whitespace
-  return sanitized.trim();
-}
+import { sanitizeString } from "./utils";
 
 export function getAppConfigFileName(options?: Options): string {
-  const shortName: string = sanitizeString((options?.appName || APP_NAME).replace(/-/g, "__"));
+  const shortName: string = sanitizeString((options?.appName || APP_NAME));
   return `__PRODUCTION__${shortName}__CONF__`.toUpperCase();
 }
 
