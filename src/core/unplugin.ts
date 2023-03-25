@@ -43,20 +43,9 @@ function createConfig({ configName, config, configFileName, outputDir, appName }
       configStr,
     );
 
-    logger.info(
-            `${cyan(`✨ [${appName}]`)} - configuration file is built successfully:`,
-    );
-    logger.info(`${gray(`${outputDir}/${green(configFileName || GLOB_CONFIG_FILE_NAME)}`)}\n`);
+    logger.info(`${cyan(`✨ [${appName}]`)} - configuration file is built successfully:\n${gray(`${outputDir}/${green(configFileName)}`)}`);
   } catch (error) {
-    if (error instanceof Error) {
-      logger.info(
-        red(`[${PLUGIN_NAME}]configuration file failed to package:\n${error.message}`),
-      );
-    } else {
-      logger.info(
-        red(`[${PLUGIN_NAME}]configuration file failed to package:\n${String(error)}`),
-      );
-    }
+    logger.info(red(`[${PLUGIN_NAME}]configuration file failed to package:\n${error instanceof Error ? error.message : String(error)}`));
   }
 }
 
@@ -114,15 +103,7 @@ export default createUnplugin<Options | undefined>(options => ({
 
       logger.info(`${cyan(`✨ [${options?.appName || APP_NAME}]`)} - build successfully!`);
     } catch (error) {
-      if (error instanceof Error) {
-        logger.error(
-          red(`[${PLUGIN_NAME}]vite build error:\n${error.message}`),
-        );
-      } else {
-        logger.error(
-          red(`[${PLUGIN_NAME}]vite build error:\n${String(error)}`),
-        );
-      }
+      red(`[${PLUGIN_NAME}]vite build error:\n${error instanceof Error ? error.message : String(error)}`);
       process.exit(1);
     }
   },
