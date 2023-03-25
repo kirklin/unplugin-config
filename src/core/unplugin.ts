@@ -9,7 +9,7 @@ import { APP_NAME, ENV_CONFIG_PREFIX, GLOB_CONFIG_FILE_NAME, OUTPUT_DIR, PLUGIN_
 
 export function getAppConfigFileName(options?: Options): string {
   const shortName: string = options?.appName || APP_NAME;
-  return `__PRODUCTION__${shortName}__CONF__`.toUpperCase().replace(/\s/g, "");
+  return `__PRODUCTION__${shortName.replace(/-/g, "__")}__CONF__`.toUpperCase().replace(/\s/g, "");
 }
 export function runBuildConfig(options?: Options) {
   const config = getEnvConfig(options?.envConfigPrefix);

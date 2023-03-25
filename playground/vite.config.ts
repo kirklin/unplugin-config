@@ -9,7 +9,7 @@ export default defineConfig({
       disabledConfig: false,
       globConfigFileName: "_app.config.js",
       outputDir: "dist",
-      appName: "Celeris Admin",
+      appName: "Celeris-Admin",
       envConfigPrefix: "VITE_GLOB_",
     }),
   ],
