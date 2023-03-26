@@ -4,6 +4,7 @@
 dist
 dist-ssr
 *.local
+_test_config.js
 
 ######################
 # Node

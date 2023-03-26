@@ -27,7 +27,7 @@ export function runBuildConfig(options?: Options) {
   });
 }
 
-function createConfig({ configName, config, configFileName, outputDir, appName }: BuildConfigOptions) {
+export function createConfig({ configName, config, configFileName, outputDir, appName }: BuildConfigOptions) {
   try {
     const windowConf = `window.${configName}`;
     const configStr = `${windowConf}=${JSON.stringify(config)};
@@ -54,7 +54,7 @@ function createConfig({ configName, config, configFileName, outputDir, appName }
 /**
  * Get the names of the configuration files that are in effect in the current environment
  */
-function getEnvConfigFiles(): string[] {
+export function getEnvConfigFiles(): string[] {
   const script = process.env.npm_lifecycle_script || "";
   const reg = /--mode ([a-z_\d]+)/;
   const mode = reg.exec(script)?.[1] || "production";
@@ -66,7 +66,7 @@ function getEnvConfigFiles(): string[] {
  * @param prefix prefix
  * @param files ext
  */
-function getEnvConfig(prefix = ENV_CONFIG_PREFIX, files = getEnvConfigFiles()) {
+export function getEnvConfig(prefix = ENV_CONFIG_PREFIX, files = getEnvConfigFiles()) {
   let envConfig = {};
 
   files.forEach((file) => {
