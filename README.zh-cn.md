@@ -9,23 +9,23 @@
 [code-style-image]: https://img.shields.io/badge/code__style-%40kirklin%2Feslint--config-brightgreen
 [code-style-url]: https://github.com/kirklin/eslint-config/
 
-<div align='center'>
-<b>English</b> | <a href="README.zh-cn.md">简体中文</a>
+<div align='left'>
+<a href="README.md">English</a> | <b>简体中文</b>
 <br>
 </div>
 
 
-A tool that generates configuration files for web applications, allowing customization of global variables that can be externally modified without the need for repackaging.
+该工具可生成Web应用程序的配置文件，并允许对全局变量进行定制化，无需重新打包即可外部修改。该工具的特点包括:
 
-##### Features
-- ✨ Generates configuration files for web applications.
-- 🔨 Allows customization of global variables.
-- 🌈 Built-in support for dotenv, enabling parsing of environment variables starting with a specified prefix.
-- 🚀 Supports packaging with Vite, Webpack, Rollup, and more.
-- 🎉 Tree-shakable, generates only the configuration file required for the application.
-- 🌟 Compatible with TypeScript.
+##### 特点
+- ✨ 生成Web应用程序的配置文件。
+- 🔨 允许对全局变量进行定制化。
+- 🌈 内置支持dotenv，可以解析以指定前缀开头的环境变量。
+- 🚀 支持与Vite、Webpack、Rollup等打包工具集成。
+- 🎉 支持按需生成配置文件。
+- 🌟 兼容TypeScript。
 
-## Install
+## 安装
 
 ```bash
 npm i unplugin-config
@@ -128,17 +128,17 @@ build({
 
 <br></details>
 
-## Configuration
+## 配置
 
-The options object contains the following properties:
+options 对象包含以下属性：
 
-- disabledConfig: A boolean value that determines whether the configuration file is generated.
-- globConfigFileName: The name of the configuration file.
-- outputDir: The directory where the configuration file is generated.
-- appName: The name of the application.
-- envConfigPrefix: The prefix for the environment variables to be parsed.
+- disabledConfig：一个布尔值，确定是否生成配置文件。
+- globConfigFileName：配置文件的名称。
+- outputDir：配置文件生成的目录。
+- appName：应用程序的名称。
+- envConfigPrefix：用于解析环境变量的前缀。
 
-## Example
+## 案例
 
 [kirklin/celeris-admin](https://github.com/kirklin/celeris-admin)
 
