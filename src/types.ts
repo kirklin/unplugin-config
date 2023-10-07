@@ -31,10 +31,6 @@ export interface Options {
   // 配置文件的输出目录。
   outputDir?: string;
 
-  // The version of the configuration file.
-  // 配置文件的版本。
-  version?: string;
-
   // An array of template files to transform.
   // 要转换的模板文件的数组。
   templates?: string[];

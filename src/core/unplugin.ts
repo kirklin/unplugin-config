@@ -148,7 +148,7 @@ export default createUnplugin<Options | undefined>((options, meta) => {
 
       const configFileName = options?.globConfigFileName || GLOB_CONFIG_FILE_NAME;
       const getAppConfigSrc = () => {
-        return `${path || "/"}${configFileName}?v=${options?.version ?? "0.0.1"}-${new Date().getTime()}`;
+        return `${path || "/"}${configFileName}`;
       };
 
       htmlCode = addScriptToHead(code, getAppConfigSrc()); // 添加JS脚本
