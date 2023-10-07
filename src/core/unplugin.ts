@@ -104,12 +104,13 @@ export function getEnvConfig(prefix = ENV_CONFIG_PREFIX, files = getEnvConfigFil
  */
 export default createUnplugin<Options | undefined>((options, meta) => {
   const { framework } = meta;
+  const ENABLE_PLUGIN = !options?.disabledConfig ?? true;
   return {
     name: PLUGIN_NAME,
     writeBundle() {
       try {
         // Generate configuration file
-        if (!options?.disabledConfig) {
+        if (ENABLE_PLUGIN) {
           runBuildConfig(options);
         }
 
@@ -122,20 +123,21 @@ export default createUnplugin<Options | undefined>((options, meta) => {
     transformInclude(id: string) {
       const formatId = formatPath(id);
       let shouldTransform = false;
-      if (options && (!options.enableInject || options.disabledConfig)) {
-        return shouldTransform;
-      }
-      // WARN: 目前 webpack 不支持这样直接注入 html，得改用 webpack(compiler) 写法，不然会报以下错误
-      // You may need an additional loader to handle the result of these loaders.
-      if (formatId.endsWith(".html") && framework !== "webpack") {
-        const covertTemplates
-            = options?.templates?.map(template => formatPath(path.resolve(process.cwd(), template))) ?? [];
-        if (!covertTemplates?.length || covertTemplates.includes(formatId)) {
-          shouldTransform = true;
+      if (ENABLE_PLUGIN) {
+        if (!(options?.enableInject ?? true)) {
+          return shouldTransform;
+        }
+        // WARN: 目前 webpack 不支持这样直接注入 html，得改用 webpack(compiler) 写法，不然会报以下错误
+        // You may need an additional loader to handle the result of these loaders.
+        if (formatId.endsWith(".html") && framework !== "webpack") {
+          const covertTemplates
+              = options?.templates?.map(template => formatPath(path.resolve(process.cwd(), template))) ?? [];
+          if (!covertTemplates?.length || covertTemplates.includes(formatId)) {
+            shouldTransform = true;
+          }
         }
       }
       return shouldTransform;
-      // console.log("transformInclude::", id);
     },
     transform(code: string) {
       // 调用示例
