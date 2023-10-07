@@ -123,6 +123,9 @@ export default createUnplugin<Options | undefined>((options, meta) => {
       const formatId = formatPath(id);
       let shouldTransform = false;
 
+      if (!(options?.enableInject ?? true)) {
+        return shouldTransform;
+      }
       // WARN: 目前 webpack 不支持这样直接注入 html，得改用 webpack(compiler) 写法，不然会报以下错误
       // You may need an additional loader to handle the result of these loaders.
       if (formatId.endsWith(".html") && framework !== "webpack") {

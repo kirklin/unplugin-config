@@ -7,6 +7,7 @@ export default defineConfig({
     Inspect(),
     Unplugin({
       disabledConfig: false,
+      enableInject: true,
       globConfigFileName: "_app.config.js",
       outputDir: "dist",
       appName: "Celeris-Admin",
