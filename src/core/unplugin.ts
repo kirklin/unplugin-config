@@ -122,8 +122,7 @@ export default createUnplugin<Options | undefined>((options, meta) => {
     transformInclude(id: string) {
       const formatId = formatPath(id);
       let shouldTransform = false;
-
-      if (!(options?.enableInject ?? true)) {
+      if (options && (!options.enableInject || options.disabledConfig)) {
         return shouldTransform;
       }
       // WARN: 目前 webpack 不支持这样直接注入 html，得改用 webpack(compiler) 写法，不然会报以下错误
