@@ -1,3 +1,4 @@
+import process from "node:process";
 import { resolve } from "node:path";
 import { createUnplugin } from "unplugin";
 import { logger } from "@kirklin/logger";

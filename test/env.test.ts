@@ -1,4 +1,6 @@
+import process from "node:process";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+
 describe("env variables", () => {
   beforeAll(() => {
     process.env.NODE_ENV = "test";
