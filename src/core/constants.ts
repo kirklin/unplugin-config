@@ -12,3 +12,5 @@ export const APP_NAME = PLUGIN_NAME;
 
 // This constant variable sets the prefix for environment variables that are related to configuration. The prefix is "VITE_GLOB_".
 export const ENV_CONFIG_PREFIX = "VITE_GLOB_";
+
+export const OUTPUT_BASE_DIR = "/";

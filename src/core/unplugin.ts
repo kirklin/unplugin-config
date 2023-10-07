@@ -1,13 +1,20 @@
 import process from "node:process";
-import { resolve } from "node:path";
+import path, { resolve } from "node:path";
 import { createUnplugin } from "unplugin";
 import { logger } from "@kirklin/logger";
 import { mkdirp, readFileSync, writeFileSync } from "fs-extra";
 import { cyan, gray, green, red } from "picocolors";
 import dotenv from "dotenv";
 import type { BuildConfigOptions, Options } from "../types";
-import { APP_NAME, ENV_CONFIG_PREFIX, GLOB_CONFIG_FILE_NAME, OUTPUT_DIR, PLUGIN_NAME } from "./constants";
-import { sanitizeString } from "./utils";
+import {
+  APP_NAME,
+  ENV_CONFIG_PREFIX,
+  GLOB_CONFIG_FILE_NAME,
+  OUTPUT_BASE_DIR,
+  OUTPUT_DIR,
+  PLUGIN_NAME,
+} from "./constants";
+import { addHeadTag, addScriptToHead, formatPath, sanitizeString } from "./utils";
 
 export function getAppConfigFileName(options?: Options): string {
   const shortName: string = sanitizeString((options?.appName || APP_NAME));
@@ -95,19 +102,53 @@ export function getEnvConfig(prefix = ENV_CONFIG_PREFIX, files = getEnvConfigFil
  * These configuration files may contain global variables that are customizable.
  *
  */
-export default createUnplugin<Options | undefined>(options => ({
-  name: PLUGIN_NAME,
-  writeBundle() {
-    try {
-      // Generate configuration file
-      if (!options?.disabledConfig) {
-        runBuildConfig(options);
-      }
+export default createUnplugin<Options | undefined>((options, meta) => {
+  const { framework } = meta;
+  return {
+    name: PLUGIN_NAME,
+    writeBundle() {
+      try {
+        // Generate configuration file
+        if (!options?.disabledConfig) {
+          runBuildConfig(options);
+        }
 
-      logger.info(`${cyan(`✨ [${options?.appName || APP_NAME}]`)} - build successfully!`);
-    } catch (error) {
-      red(`[${PLUGIN_NAME}]vite build error:\n${error instanceof Error ? error.message : String(error)}`);
-      process.exit(1);
-    }
-  },
-}));
+        logger.info(`${cyan(`✨ [${options?.appName || APP_NAME}]`)} - build successfully!`);
+      } catch (error) {
+        red(`[${PLUGIN_NAME}]vite build error:\n${error instanceof Error ? error.message : String(error)}`);
+        process.exit(1);
+      }
+    },
+    transformInclude(id: string) {
+      const formatId = formatPath(id);
+      let shouldTransform = false;
+
+      // WARN: 目前 webpack 不支持这样直接注入 html，得改用 webpack(compiler) 写法，不然会报以下错误
+      // You may need an additional loader to handle the result of these loaders.
+      if (formatId.endsWith(".html") && framework !== "webpack") {
+        const covertTemplates
+            = options?.templates?.map(template => formatPath(path.resolve(process.cwd(), template))) ?? [];
+        if (!covertTemplates?.length || covertTemplates.includes(formatId)) {
+          shouldTransform = true;
+        }
+      }
+      return shouldTransform;
+      // console.log("transformInclude::", id);
+    },
+    transform(code: string) {
+      // 调用示例
+      let htmlCode = code;
+      htmlCode = addHeadTag(code); // 添加<head>标签
+      const BASE_DIR = options?.baseDir ?? OUTPUT_BASE_DIR;
+      const path = BASE_DIR.endsWith("/") ? options?.baseDir : `${options?.baseDir}/`;
+
+      const configFileName = options?.globConfigFileName || GLOB_CONFIG_FILE_NAME;
+      const getAppConfigSrc = () => {
+        return `${path || "/"}${configFileName}?v=${options?.version ?? "0.0.1"}-${new Date().getTime()}`;
+      };
+
+      htmlCode = addScriptToHead(code, getAppConfigSrc()); // 添加JS脚本
+      return htmlCode;
+    },
+  };
+});
