@@ -1,8 +1,8 @@
 import process from "node:process";
 import path, { resolve } from "node:path";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import type { UnpluginFactory } from "unplugin";
 import { logger } from "@kirklin/logger";
-import { mkdirp, readFileSync, writeFileSync } from "fs-extra";
 import { cyan, gray, green, red } from "picocolors";
 import dotenv from "dotenv";
 import type { BuildConfigOptions, Options } from "../types";
@@ -46,7 +46,7 @@ export function createConfig({ configName, config, configFileName, outputDir, ap
       });`.replace(/\s/g, "");
 
     const outputPath = resolve(process.cwd(), outputDir);
-    void mkdirp(outputPath).then();
+    mkdirSync(outputPath, { recursive: true });
 
     writeFileSync(
       resolve(outputPath, configFileName || GLOB_CONFIG_FILE_NAME),
