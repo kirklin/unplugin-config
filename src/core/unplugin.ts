@@ -3,7 +3,6 @@ import path, { resolve } from "node:path";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import type { UnpluginFactory } from "unplugin";
 import { logger } from "@kirklin/logger";
-import { cyan, gray, green, red } from "picocolors";
 import dotenv from "dotenv";
 import type { BuildConfigOptions, Options } from "../types";
 import {
@@ -16,16 +15,25 @@ import {
 } from "./constants";
 import { addHeadTag, addScriptToHead, formatPath, sanitizeString } from "./utils";
 
+/**
+ * Get the application configuration file name
+ * @param options Options
+ * @returns Application configuration file name
+ */
 export function getAppConfigFileName(options?: Options): string {
   const shortName: string = sanitizeString((options?.appName || APP_NAME));
   return `__PRODUCTION__${shortName}__CONF__`.toUpperCase();
 }
 
+/**
+ * Run build configuration
+ * @param options Options
+ */
 export function runBuildConfig(options?: Options) {
   const config = getEnvConfig(options?.envConfigPrefix);
-  logger.info(`[${PLUGIN_NAME}]runBuildConfig: ${JSON.stringify(config)}`);
+  logger.info(`[${PLUGIN_NAME}] runBuildConfig: ${JSON.stringify(config)}`);
   const configFileName = getAppConfigFileName(options);
-  logger.info(`[${PLUGIN_NAME}]configFileName: ${configFileName}`);
+  logger.info(`[${PLUGIN_NAME}] configFileName: ${configFileName}`);
   createConfig({
     configName: configFileName,
     config,
@@ -35,6 +43,14 @@ export function runBuildConfig(options?: Options) {
   });
 }
 
+/**
+ * Create a configuration file
+ * @param configName Configuration name
+ * @param config Configuration
+ * @param configFileName Configuration file name
+ * @param outputDir Output directory
+ * @param appName Application name
+ */
 export function createConfig({ configName, config, configFileName, outputDir, appName }: BuildConfigOptions) {
   try {
     const windowConf = `window.${configName}`;
@@ -53,14 +69,15 @@ export function createConfig({ configName, config, configFileName, outputDir, ap
       configStr,
     );
 
-    logger.info(`${cyan(`✨ [${appName}]`)} - configuration file is built successfully:\n${gray(`${outputDir}/${green(configFileName)}`)}`);
+    logger.info(`✨ [${appName}] - Configuration file is built successfully:\n${outputDir}/${configFileName || GLOB_CONFIG_FILE_NAME}`);
   } catch (error) {
-    logger.info(red(`[${PLUGIN_NAME}]configuration file failed to package:\n${error instanceof Error ? error.message : String(error)}`));
+    logger.info(`[${PLUGIN_NAME}] Configuration file failed to package:\n${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
 /**
  * Get the names of the configuration files that are in effect in the current environment
+ * @returns Configuration file names
  */
 export function getEnvConfigFiles(): string[] {
   const script = process.env.npm_lifecycle_script || "";
@@ -71,8 +88,9 @@ export function getEnvConfigFiles(): string[] {
 
 /**
  * Get the environment variables starting with the specified prefix
- * @param prefix prefix
- * @param files ext
+ * @param prefix Prefix
+ * @param files Files
+ * @returns Environment variables object
  */
 export function getEnvConfig(prefix = ENV_CONFIG_PREFIX, files = getEnvConfigFiles()) {
   let envConfig = {};
@@ -82,7 +100,7 @@ export function getEnvConfig(prefix = ENV_CONFIG_PREFIX, files = getEnvConfigFil
       const env = dotenv.parse(readFileSync(resolve(process.cwd(), file)));
       envConfig = { ...envConfig, ...env };
     } catch (e) {
-      console.error(`[${PLUGIN_NAME}]Error in parsing ${file}`, e);
+      console.error(`[${PLUGIN_NAME}] Error in parsing ${file}`, e);
     }
   });
 
@@ -114,9 +132,9 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options, m
           runBuildConfig(options);
         }
 
-        logger.info(`${cyan(`✨ [${options?.appName || APP_NAME}]`)} - build successfully!`);
+        logger.info(`✨ [${options?.appName || APP_NAME}] - Build successfully!`);
       } catch (error) {
-        red(`[${PLUGIN_NAME}]vite build error:\n${error instanceof Error ? error.message : String(error)}`);
+        console.error(`[${PLUGIN_NAME}] Vite build error:\n${error instanceof Error ? error.message : String(error)}`);
         process.exit(1);
       }
     },
@@ -127,7 +145,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options, m
         if (!(options?.enableInject ?? true)) {
           return shouldTransform;
         }
-        // WARN: 目前 webpack 不支持这样直接注入 html，得改用 webpack(compiler) 写法，不然会报以下错误
+        // WARN: Currently, webpack does not support directly injecting HTML in this way.
         // You may need an additional loader to handle the result of these loaders.
         if (formatId.endsWith(".html") && framework !== "webpack") {
           const covertTemplates
@@ -140,9 +158,9 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options, m
       return shouldTransform;
     },
     transform(code: string) {
-      // 调用示例
+      // Example usage
       let htmlCode = code;
-      htmlCode = addHeadTag(code); // 添加<head>标签
+      htmlCode = addHeadTag(code); // Add <head> tag
       const BASE_DIR = options?.baseDir ?? OUTPUT_BASE_DIR;
       const path = BASE_DIR.endsWith("/") ? options?.baseDir : `${options?.baseDir}/`;
 
@@ -151,7 +169,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options, m
         return `${path || "/"}${configFileName}`;
       };
 
-      htmlCode = addScriptToHead(code, getAppConfigSrc()); // 添加JS脚本
+      htmlCode = addScriptToHead(code, getAppConfigSrc()); // Add JS script
       return htmlCode;
     },
   };
