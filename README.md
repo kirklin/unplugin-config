@@ -145,4 +145,4 @@ The options object contains the following properties:
 
 ## License
 
-[MIT](./LICENSE) License © 2022 [Kirk Lin](https://github.com/kirklin)
+[MIT](./LICENSE) License © 2022-PRESENT [Kirk Lin](https://github.com/kirklin)

@@ -145,4 +145,4 @@ options 对象包含以下属性：
 
 ## License
 
-[MIT](./LICENSE) License © 2022 [Kirk Lin](https://github.com/kirklin)
+[MIT](./LICENSE) License © 2022-PRESENT [Kirk Lin](https://github.com/kirklin)
