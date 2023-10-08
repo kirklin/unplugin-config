@@ -59,7 +59,7 @@ export function createConfig({ configName, config, configFileName, outputDir, ap
       Object.defineProperty(window, "${configName}", {
         configurable: false,
         writable: false,
-      });`.replace(/\s/g, "");
+      });`.replace(/\n\s*/g, "");
 
     const outputPath = resolve(process.cwd(), outputDir);
     mkdirSync(outputPath, { recursive: true });
