@@ -86,6 +86,34 @@
     "start": "esno src/index.ts",
     "test": "vitest"
   },
+  "peerDependencies": {
+    "@nuxt/kit": "^3",
+    "@nuxt/schema": "^3",
+    "esbuild": "*",
+    "rollup": "^3",
+    "vite": ">=3",
+    "webpack": "^4 || ^5"
+  },
+  "peerDependenciesMeta": {
+    "webpack": {
+      "optional": true
+    },
+    "rollup": {
+      "optional": true
+    },
+    "vite": {
+      "optional": true
+    },
+    "esbuild": {
+      "optional": true
+    },
+    "@nuxt/kit": {
+      "optional": true
+    },
+    "@nuxt/schema": {
+      "optional": true
+    }
+  },
   "dependencies": {
     "@kirklin/logger": "0.0.2",
     "fs-extra": "^11.1.1",
@@ -93,6 +121,8 @@
   },
   "devDependencies": {
     "@kirklin/eslint-config": "^0.5.6",
+    "@nuxt/kit": "^3.6.5",
+    "@nuxt/schema": "^3.6.5",
     "@types/fs-extra": "^11.0.2",
     "@types/node": "^20.8.3",
     "bumpp": "^9.2.0",

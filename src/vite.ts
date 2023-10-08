@@ -1,3 +1,4 @@
-import unplugin from ".";
+import { createVitePlugin } from "unplugin";
+import { unpluginFactory } from "./core/unplugin";
 
-export default unplugin.vite;
+export default createVitePlugin(unpluginFactory);

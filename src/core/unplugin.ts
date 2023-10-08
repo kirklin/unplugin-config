@@ -1,6 +1,6 @@
 import process from "node:process";
 import path, { resolve } from "node:path";
-import { createUnplugin } from "unplugin";
+import type { UnpluginFactory } from "unplugin";
 import { logger } from "@kirklin/logger";
 import { mkdirp, readFileSync, writeFileSync } from "fs-extra";
 import { cyan, gray, green, red } from "picocolors";
@@ -102,7 +102,7 @@ export function getEnvConfig(prefix = ENV_CONFIG_PREFIX, files = getEnvConfigFil
  * These configuration files may contain global variables that are customizable.
  *
  */
-export default createUnplugin<Options | undefined>((options, meta) => {
+export const unpluginFactory: UnpluginFactory<Options | undefined> = (options, meta) => {
   const { framework } = meta;
   const ENABLE_PLUGIN = !options?.disabledConfig ?? true;
   return {
@@ -155,4 +155,4 @@ export default createUnplugin<Options | undefined>((options, meta) => {
       return htmlCode;
     },
   };
-});
+};
