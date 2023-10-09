@@ -44,12 +44,15 @@ export function runBuildConfig(options?: Options) {
 }
 
 /**
- * Create a configuration file
- * @param configName Configuration name
- * @param config Configuration
- * @param configFileName Configuration file name
- * @param outputDir Output directory
- * @param appName Application name
+ * Creates a configuration file.
+ * 创建一个配置文件。
+ *
+ * @param {object} options - Configuration options.
+ * @param {string} options.configName - Configuration name.
+ * @param {object} options.config - Configuration object.
+ * @param {string} options.configFileName - Configuration file name.
+ * @param {string} options.outputDir - Output directory.
+ * @param {string} options.appName - Application name.
  */
 export function createConfig({ configName, config, configFileName, outputDir, appName }: BuildConfigOptions) {
   try {
