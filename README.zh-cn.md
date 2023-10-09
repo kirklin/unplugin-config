@@ -130,13 +130,48 @@ build({
 
 ## 配置
 
-options 对象包含以下属性：
+`Options` 对象包含以下属性：
 
-- disabledConfig：一个布尔值，确定是否生成配置文件。
-- globConfigFileName：配置文件的名称。
-- outputDir：配置文件生成的目录。
-- appName：应用程序的名称。
-- envConfigPrefix：用于解析环境变量的前缀。
+### 配置文件选项 (`configFile`)
+
+- `generate`（布尔值，可选）：启用或禁用生成配置文件。默认为 `true`。
+- `fileName`（字符串，可选）：全局配置文件的名称。默认为 `"config.js"`。
+- `outputDir`（字符串，可选）：配置文件生成的目录。默认为 `"./dist"`。
+
+### HTML 注入选项 (`htmlInjection`)
+
+- `enable`（布尔值，可选）：启用或禁用将配置注入到 HTML 文件中。默认为 `true`。
+- `templates`（字符串数组，可选）：要转换的模板文件数组。
+- `position`（字符串，可选）：将配置脚本注入到 HTML 文件的位置。可能的值为 `"head"`、`"body"` 或 `"custom"`。默认为 `"head"`。
+- `customPosition`（字符串，可选）：当 `position` 设置为 `"custom"` 时的自定义 HTML 注入位置。
+
+### 环境变量选项 (`envVariables`)
+
+- `prefix`（字符串，可选）：用于配置中的环境变量的前缀。
+- `files`（字符串数组，可选）：从中加载环境变量的配置文件数组。
+
+### 示例
+
+```javascript
+const configurationOptions = {
+  appName: "MyApp",
+  configFile: {
+    generate: true,
+    fileName: "_app.config.js",
+    outputDir: "dist",
+  },
+  htmlInjection: {
+    enable: true,
+    templates: ["index.html"],
+    position: "head",
+    customPosition: "<!-- 自定义脚本位置 -->",
+  },
+  envVariables: {
+    prefix: "VITE_GLOB_",
+    files: [".env.production", ".env"],
+  },
+};
+```
 
 ## 案例
 

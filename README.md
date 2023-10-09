@@ -130,13 +130,49 @@ build({
 
 ## Configuration
 
-The options object contains the following properties:
+The `Options` object contains the following properties:
 
-- disabledConfig: A boolean value that determines whether the configuration file is generated.
-- globConfigFileName: The name of the configuration file.
-- outputDir: The directory where the configuration file is generated.
-- appName: The name of the application.
-- envConfigPrefix: The prefix for the environment variables to be parsed.
+### Configuration File Options (`configFile`)
+
+- `generate` (boolean, optional): Enable or disable generating the configuration file. Default is `true`.
+- `fileName` (string, optional): The name of the global configuration file. Default is `"config.js"`.
+- `outputDir` (string, optional): The directory where the configuration file is generated. Default is `"./dist"`.
+
+### HTML Injection Options (`htmlInjection`)
+
+- `enable` (boolean, optional): Enable or disable injecting configuration into HTML files. Default is `true`.
+- `templates` (string[], optional): An array of template files to transform.
+- `position` (string, optional): The position where the configuration script is injected into HTML files. Possible values are `"head"`, `"body"`, or `"custom"`. Default is `"head"`.
+- `customPosition` (string, optional): Custom HTML injection position when `position` is set to `"custom"`.
+
+### Environment Variables Options (`envVariables`)
+
+- `prefix` (string, optional): The prefix for environment variables used in configuration.
+- `files` (string[], optional): An array of configuration files to load environment variables from.
+
+### Example
+
+```javascript
+const configurationOptions = {
+  appName: "MyApp",
+  configFile: {
+    generate: true,
+    fileName: "_app.config.js",
+    outputDir: "dist",
+  },
+  htmlInjection: {
+    enable: true,
+    templates: ["index.html"],
+    position: "head",
+    customPosition: "<!-- custom script position -->",
+  },
+  envVariables: {
+    prefix: "VITE_GLOB_",
+    files: [".env.production", ".env"],
+  },
+};
+```
+
 
 ## Example
 
