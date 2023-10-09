@@ -1,4 +1,4 @@
-import { logger } from "@kirklin/logger";
+import { JSDOM } from "jsdom";
 
 export function sanitizeString(str: string): string {
   // Replace invalid characters with an empty string
@@ -11,36 +11,44 @@ export function formatPath(path: string): string {
   return path.replace(/\\/g, "/");
 }
 
-// 添加<head>标签到HTML代码中
-export function addHeadTag(code: string) {
-  // 检查是否已经有<head>标签
-  if (code.includes("<head>")) {
-    // console.log("已经存在<head>标签");
-    return code;
-  }
+/**
+ * Adds a script tag with the specified source to the given HTML code.
+ * 在给定的HTML代码中添加带有指定源的脚本标签。
+ *
+ * @param {string} htmlCode - The HTML code to which the script tag will be added.
+ *                           将要添加脚本标签的HTML代码。
+ * @param {string} scriptSrc - The source URL of the script to be added.
+ *                           要添加的脚本的源URL。
+ * @param {"head" | "body" | "head-prepend" | "body-prepend"} position - The position where the script tag should be inserted.
+ *                                                                    脚本标签应该插入的位置。
+ *                                                                    Possible values: "head", "body", "head-prepend", "body-prepend".
+ *                                                                    可能的值: "head", "body", "head-prepend", "body-prepend"。
+ * @returns {string} Returns the modified HTML code with the added script tag.
+ *                  返回带有添加的脚本标签的修改后的HTML代码。
+ */
+export function addScriptToHtmlCode(htmlCode: string, scriptSrc: string, position: "head" | "body" | "head-prepend" | "body-prepend" = "head-prepend"): string {
+  // Create a DOM environment using jsdom
+  const dom = new JSDOM(htmlCode);
 
-  // 如果没有<head>标签，添加一个空的<head>标签
-  const headTag = "<head></head>";
-  return code.replace(/<html[^>]*>/i, `$&${headTag}`);
-}
+  // Create a new script element
+  const scriptElement = dom.window.document.createElement("script");
+  scriptElement.src = scriptSrc;
 
-// 添加JS脚本到<head>标签中
-export function addScriptToHead(code: string, scriptSrc: string) {
-  // 使用正则表达式匹配<head>标签
-  const headRegex = /<head[^>]*>/i;
-  const match = code.match(headRegex);
+  // Get the target element where the script tag should be inserted
+  const targetElement = (position === "body" || position === "body-prepend")
+    ? dom.window.document.body
+    : dom.window.document.head;
 
-  if (match) {
-    // 匹配到<head>标签
-    const headTag = match[0];
-    const jsScript = `<script crossorigin src="${scriptSrc}"></script>`;
-
-    // 在<head>标签内部末尾插入JS脚本
-    const transformedCode = code.replace(headTag, headTag + jsScript);
-    return transformedCode;
+  if (position === "head-prepend" || position === "body-prepend") {
+    // Prepend the script tag to the target element
+    targetElement.insertBefore(scriptElement, targetElement.firstChild);
   } else {
-    // 如果没有匹配到<head>标签，可能是无效的HTML代码
-    logger.error("无法找到<head>标签");
-    return code;
+    // Append the script tag to the target element
+    targetElement.appendChild(scriptElement);
   }
+
+  // Serialize the updated HTML code
+  const updatedHtmlCode = dom.serialize();
+
+  return updatedHtmlCode;
 }

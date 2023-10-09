@@ -9,5 +9,5 @@ export default defineConfig({
   clean: true,
   dts: true,
   onSuccess: "npm run build:fix",
-  external: ["dotenv"],
+  external: ["dotenv", "jsdom"],
 });

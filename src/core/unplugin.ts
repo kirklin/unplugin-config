@@ -13,7 +13,7 @@ import {
   OUTPUT_DIR,
   PLUGIN_NAME,
 } from "./constants";
-import { addHeadTag, addScriptToHead, formatPath, sanitizeString } from "./utils";
+import { addScriptToHtmlCode, formatPath, sanitizeString } from "./utils";
 
 /**
  * Get the application configuration file name
@@ -161,19 +161,19 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options, m
       return shouldTransform;
     },
     transform(code: string) {
-      // Example usage
-      let htmlCode = code;
-      htmlCode = addHeadTag(code); // Add <head> tag
-      const BASE_DIR = options?.baseDir ?? OUTPUT_BASE_DIR;
-      const path = BASE_DIR.endsWith("/") ? options?.baseDir : `${options?.baseDir}/`;
+      // Destructure options for cleaner code
+      const { baseDir, configFile, htmlInjection } = options || {};
 
-      const configFileName = options?.configFile?.fileName || GLOB_CONFIG_FILE_NAME;
-      const getAppConfigSrc = () => {
-        return `${path || "/"}${configFileName}`;
-      };
+      // Default values
+      const BASE_DIR = baseDir || OUTPUT_BASE_DIR;
+      const configFileName = (configFile && configFile.fileName) || GLOB_CONFIG_FILE_NAME;
+      const position = (htmlInjection && htmlInjection.position) || "head-prepend";
 
-      htmlCode = addScriptToHead(code, getAppConfigSrc()); // Add JS script
-      return htmlCode;
+      // Define a function to get the script source
+      const getAppConfigSrc = () => `${BASE_DIR.endsWith("/") ? BASE_DIR : `${BASE_DIR}/`}${configFileName}`;
+
+      // Add JS script to the HTML code using the custom function
+      return addScriptToHtmlCode(code, getAppConfigSrc(), position);
     },
   };
 };

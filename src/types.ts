@@ -40,7 +40,7 @@ export interface Options {
 
     // HTML injection position options.
     // HTML 注入位置选项。
-    position?: "head" | "body" | "custom";
+    position?: "head" | "body" | "head-prepend" | "body-prepend";
 
     // Custom HTML injection position.
     // 自定义 HTML 注入位置。
