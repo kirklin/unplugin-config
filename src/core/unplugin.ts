@@ -30,7 +30,7 @@ export function getAppConfigFileName(options?: Options): string {
  * @param options Options
  */
 export function runBuildConfig(options?: Options) {
-  const config = getEnvConfig(options?.envVariables?.prefix);
+  const config = getEnvConfig(options?.envVariables?.prefix, options?.envVariables?.files);
   logger.info(`[${PLUGIN_NAME}] runBuildConfig: ${JSON.stringify(config)}`);
   const configFileName = getAppConfigFileName(options);
   logger.info(`[${PLUGIN_NAME}] configFileName: ${configFileName}`);
@@ -71,7 +71,7 @@ export function createConfig({ configName, config, configFileName, outputDir, ap
 
     logger.info(`✨ [${appName}] - Configuration file is built successfully:\n${outputDir}/${configFileName || GLOB_CONFIG_FILE_NAME}`);
   } catch (error) {
-    logger.info(`[${PLUGIN_NAME}] Configuration file failed to package:\n${error instanceof Error ? error.message : String(error)}`);
+    logger.error(`[${PLUGIN_NAME}] Configuration file failed to package:\n${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
