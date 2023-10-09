@@ -132,6 +132,11 @@ build({
 
 The `Options` object contains the following properties:
 
+### Application Options (`appName` and `baseDir`)
+
+- `appName` (string, optional): The name of the application.
+- `baseDir` (string, optional): The base directory for the output.
+
 ### Configuration File Options (`configFile`)
 
 - `generate` (boolean, optional): Enable or disable generating the configuration file. Default is `true`.
@@ -142,8 +147,7 @@ The `Options` object contains the following properties:
 
 - `enable` (boolean, optional): Enable or disable injecting configuration into HTML files. Default is `true`.
 - `templates` (string[], optional): An array of template files to transform.
-- `position` (string, optional): The position where the configuration script is injected into HTML files. Possible values are `"head"`, `"body"`, or `"custom"`. Default is `"head"`.
-- `customPosition` (string, optional): Custom HTML injection position when `position` is set to `"custom"`.
+- `position` (string, optional): The position where the configuration script is injected into HTML files. Possible values are `"head"`, `"body"`, `"head-prepend"`, or `"body-prepend"`. Default is `"head-prepend"`.
 
 ### Environment Variables Options (`envVariables`)
 
@@ -163,8 +167,7 @@ const configurationOptions = {
   htmlInjection: {
     enable: true,
     templates: ["index.html"],
-    position: "head",
-    customPosition: "<!-- custom script position -->",
+    position: "head-prepend",
   },
   envVariables: {
     prefix: "VITE_GLOB_",

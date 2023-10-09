@@ -132,23 +132,27 @@ build({
 
 `Options` 对象包含以下属性：
 
+### 应用程序选项 (`appName` 和 `baseDir`)
+
+- `appName` (字符串, 可选): 应用程序的名称。
+- `baseDir` (字符串, 可选): 输出的基本目录。
+
 ### 配置文件选项 (`configFile`)
 
-- `generate`（布尔值，可选）：启用或禁用生成配置文件。默认为 `true`。
-- `fileName`（字符串，可选）：全局配置文件的名称。默认为 `"config.js"`。
-- `outputDir`（字符串，可选）：配置文件生成的目录。默认为 `"./dist"`。
+- `generate` (布尔值, 可选): 启用或禁用生成配置文件。默认为 `true`。
+- `fileName` (字符串, 可选): 全局配置文件的名称。默认为 `"config.js"`。
+- `outputDir` (字符串, 可选): 配置文件生成的目录。默认为 `"./dist"`。
 
 ### HTML 注入选项 (`htmlInjection`)
 
-- `enable`（布尔值，可选）：启用或禁用将配置注入到 HTML 文件中。默认为 `true`。
-- `templates`（字符串数组，可选）：要转换的模板文件数组。
-- `position`（字符串，可选）：将配置脚本注入到 HTML 文件的位置。可能的值为 `"head"`、`"body"` 或 `"custom"`。默认为 `"head"`。
-- `customPosition`（字符串，可选）：当 `position` 设置为 `"custom"` 时的自定义 HTML 注入位置。
+- `enable` (布尔值, 可选): 启用或禁用将配置注入到 HTML 文件中。默认为 `true`。
+- `templates` (字符串数组, 可选): 需要转换的模板文件的数组。
+- `position` (字符串, 可选): 将配置脚本注入到 HTML 文件的位置。可能的值为 `"head"`、`"body"`、`"head-prepend"` 或 `"body-prepend"`。默认为 `"head-prepend"`。
 
 ### 环境变量选项 (`envVariables`)
 
-- `prefix`（字符串，可选）：用于配置中的环境变量的前缀。
-- `files`（字符串数组，可选）：从中加载环境变量的配置文件数组。
+- `prefix` (字符串, 可选): 用于配置中的环境变量的前缀。
+- `files` (字符串数组, 可选): 从中加载环境变量的配置文件数组。
 
 ### 示例
 
@@ -164,7 +168,6 @@ const configurationOptions = {
     enable: true,
     templates: ["index.html"],
     position: "head",
-    customPosition: "<!-- 自定义脚本位置 -->",
   },
   envVariables: {
     prefix: "VITE_GLOB_",
