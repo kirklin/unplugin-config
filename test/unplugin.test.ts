@@ -37,15 +37,20 @@ describe("getEnvConfig", () => {
 describe("runBuildConfig", () => {
   it("should create a config file", () => {
     const options = {
-      envConfigPrefix: "VITE_GLOB",
-      globConfigFileName: "_test_config.js",
-      outputDir: "test",
       appName: "UNPLUGIN-CONFIG",
+      envVariables: {
+        prefix: "VITE_GLOB_",
+      },
+      configFile: {
+        generate: true,
+        fileName: "_test_config.js",
+        outputDir: "test",
+      },
     };
 
     runBuildConfig(options);
-    const outputPath = path.resolve(process.cwd(), options.outputDir);
-    const configFilePath = path.resolve(outputPath, options.globConfigFileName);
+    const outputPath = path.resolve(process.cwd(), options.configFile.outputDir);
+    const configFilePath = path.resolve(outputPath, options.configFile.fileName);
     const config = fs.readFileSync(configFilePath, { encoding: "utf8" });
 
     expect(config).toMatch("window.__PRODUCTION__UNPLUGIN__CONFIG__CONF__");
