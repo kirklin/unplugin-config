@@ -30,15 +30,15 @@ export function getAppConfigFileName(options?: Options): string {
  * @param options Options
  */
 export function runBuildConfig(options?: Options) {
-  const config = getEnvConfig(options?.envConfigPrefix);
+  const config = getEnvConfig(options?.envVariables?.prefix);
   logger.info(`[${PLUGIN_NAME}] runBuildConfig: ${JSON.stringify(config)}`);
   const configFileName = getAppConfigFileName(options);
   logger.info(`[${PLUGIN_NAME}] configFileName: ${configFileName}`);
   createConfig({
     configName: configFileName,
     config,
-    configFileName: options?.globConfigFileName,
-    outputDir: options?.outputDir || OUTPUT_DIR,
+    configFileName: options?.configFile?.fileName,
+    outputDir: options?.configFile?.outputDir || OUTPUT_DIR,
     appName: options?.appName || APP_NAME,
   });
 }
@@ -122,7 +122,7 @@ export function getEnvConfig(prefix = ENV_CONFIG_PREFIX, files = getEnvConfigFil
  */
 export const unpluginFactory: UnpluginFactory<Options | undefined> = (options, meta) => {
   const { framework } = meta;
-  const ENABLE_PLUGIN = !options?.disabledConfig ?? true;
+  const ENABLE_PLUGIN = options?.configFile?.generate ?? true;
   return {
     name: PLUGIN_NAME,
     writeBundle() {
@@ -142,14 +142,14 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options, m
       const formatId = formatPath(id);
       let shouldTransform = false;
       if (ENABLE_PLUGIN) {
-        if (!(options?.enableInject ?? true)) {
+        if (!(options?.htmlInjection?.enable ?? true)) {
           return shouldTransform;
         }
         // WARN: Currently, webpack does not support directly injecting HTML in this way.
         // You may need an additional loader to handle the result of these loaders.
         if (formatId.endsWith(".html") && framework !== "webpack") {
           const covertTemplates
-              = options?.templates?.map(template => formatPath(path.resolve(process.cwd(), template))) ?? [];
+              = options?.htmlInjection?.templates?.map(template => formatPath(path.resolve(process.cwd(), template))) ?? [];
           if (!covertTemplates?.length || covertTemplates.includes(formatId)) {
             shouldTransform = true;
           }
@@ -164,7 +164,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options, m
       const BASE_DIR = options?.baseDir ?? OUTPUT_BASE_DIR;
       const path = BASE_DIR.endsWith("/") ? options?.baseDir : `${options?.baseDir}/`;
 
-      const configFileName = options?.globConfigFileName || GLOB_CONFIG_FILE_NAME;
+      const configFileName = options?.configFile?.fileName || GLOB_CONFIG_FILE_NAME;
       const getAppConfigSrc = () => {
         return `${path || "/"}${configFileName}`;
       };

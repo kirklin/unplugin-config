@@ -11,29 +11,53 @@ export interface Options {
   // 输出的基本目录。
   baseDir?: string;
 
-  // Disable generating configuration file.
-  // 禁用生成配置文件。
-  disabledConfig?: boolean;
+  // Configuration file options.
+  // 配置文件选项。
+  configFile?: {
+    // Enable or disable generating the configuration file.
+    // 启用或禁用生成配置文件。
+    generate?: boolean;
 
-  // Enable injecting configuration into HTML files.
-  // 启用将配置注入到 HTML 文件中。
-  enableInject?: boolean;
+    // The name of the global configuration file.
+    // 全局配置文件的名称。
+    fileName?: string;
 
-  // The prefix for environment variables used in configuration.
-  // 用于配置中的环境变量的前缀。
-  envConfigPrefix?: string;
+    // The output directory for the configuration file.
+    // 配置文件的输出目录。
+    outputDir?: string;
+  };
 
-  // The name of the global configuration file.
-  // 全局配置文件的名称。
-  globConfigFileName?: string;
+  // HTML injection options.
+  // HTML 注入选项。
+  htmlInjection?: {
+    // Enable or disable injecting configuration into HTML files.
+    // 启用或禁用将配置注入到 HTML 文件中。
+    enable?: boolean;
 
-  // The output directory for the configuration file.
-  // 配置文件的输出目录。
-  outputDir?: string;
+    // An array of template files to transform.
+    // 要转换的模板文件的数组。
+    templates?: string[];
 
-  // An array of template files to transform.
-  // 要转换的模板文件的数组。
-  templates?: string[];
+    // HTML injection position options.
+    // HTML 注入位置选项。
+    position?: "head" | "body" | "custom";
+
+    // Custom HTML injection position.
+    // 自定义 HTML 注入位置。
+    customPosition?: string;
+  };
+
+  // Environment variables options.
+  // 环境变量选项。
+  envVariables?: {
+    // The prefix for environment variables used in configuration.
+    // 用于配置中的环境变量的前缀。
+    prefix?: string;
+
+    // An array of configuration files to load environment variables from.
+    // 从中加载环境变量的配置文件数组。
+    files?: string[];
+  };
 }
 
 /**

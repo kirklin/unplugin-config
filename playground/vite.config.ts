@@ -6,12 +6,18 @@ export default defineConfig({
   plugins: [
     Inspect(),
     Unplugin({
-      disabledConfig: false,
-      enableInject: true,
-      globConfigFileName: "_app.config.js",
-      outputDir: "dist",
       appName: "Celeris-Admin",
-      envConfigPrefix: "VITE_GLOB_",
+      configFile: {
+        generate: true,
+        fileName: "_app.config.js",
+        outputDir: "dist",
+      },
+      htmlInjection: {
+        enable: true,
+      },
+      envVariables: {
+        prefix: "VITE_GLOB_",
+      },
     }),
   ],
 });
