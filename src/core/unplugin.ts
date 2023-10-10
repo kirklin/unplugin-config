@@ -13,7 +13,7 @@ import {
   OUTPUT_DIR,
   PLUGIN_NAME,
 } from "./constants";
-import { addScriptToHtmlCode, formatPath, sanitizeString } from "./utils";
+import { addScriptToHtmlCode, decodeHtmlEntities, formatPath, sanitizeString } from "./utils";
 
 /**
  * Get the application configuration file name
@@ -168,12 +168,20 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options, m
       const BASE_DIR = baseDir || OUTPUT_BASE_DIR;
       const configFileName = (configFile && configFile.fileName) || GLOB_CONFIG_FILE_NAME;
       const position = (htmlInjection && htmlInjection.position) || "head-prepend";
+      const shouldDecodeEntities = htmlInjection && htmlInjection.decodeEntities === true;
 
       // Define a function to get the script source
       const getAppConfigSrc = () => `${BASE_DIR.endsWith("/") ? BASE_DIR : `${BASE_DIR}/`}${configFileName}`;
 
       // Add JS script to the HTML code using the custom function
-      return addScriptToHtmlCode(code, getAppConfigSrc(), position);
+      let updatedCode = addScriptToHtmlCode(code, getAppConfigSrc(), position);
+
+      // Decode HTML entities if specified
+      if (shouldDecodeEntities) {
+        updatedCode = decodeHtmlEntities(updatedCode);
+      }
+
+      return updatedCode;
     },
   };
 };

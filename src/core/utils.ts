@@ -1,5 +1,7 @@
 import { JSDOM } from "jsdom";
 
+import { decode } from "html-entities";
+
 export function sanitizeString(str: string): string {
   // Replace invalid characters with an empty string
   const sanitized = str.replace(/[^\w.-]/g, "");
@@ -51,4 +53,17 @@ export function addScriptToHtmlCode(htmlCode: string, scriptSrc: string, positio
   const updatedHtmlCode = dom.serialize();
 
   return updatedHtmlCode;
+}
+
+/**
+ * Decode HTML entities (HTML实体编码) in a string.
+ * 解码字符串中的HTML实体编码。
+ *
+ * @param {string} encodedString - The string containing HTML entities to decode.
+ *                                包含需要解码的HTML实体编码的字符串。
+ * @returns {string} Returns the decoded string.
+ *                  返回解码后的字符串。
+ */
+export function decodeHtmlEntities(encodedString: string): string {
+  return decode(encodedString, { level: "xml", scope: "strict" });
 }

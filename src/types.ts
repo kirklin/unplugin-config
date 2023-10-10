@@ -41,6 +41,10 @@ export interface Options {
     // HTML injection position options.
     // HTML 注入位置选项。
     position?: "head" | "body" | "head-prepend" | "body-prepend";
+
+    // Whether to decode HTML entities in the injected HTML code.
+    // 是否对注入的HTML代码进行HTML实体编码的解码。
+    decodeEntities?: boolean;
   };
 
   // Environment variables options.

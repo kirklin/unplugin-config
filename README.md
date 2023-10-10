@@ -148,6 +148,7 @@ The `Options` object contains the following properties:
 - `enable` (boolean, optional): Enable or disable injecting configuration into HTML files. Default is `true`.
 - `templates` (string[], optional): An array of template files to transform.
 - `position` (string, optional): The position where the configuration script is injected into HTML files. Possible values are `"head"`, `"body"`, `"head-prepend"`, or `"body-prepend"`. Default is `"head-prepend"`.
+- `decodeEntities` (boolean, optional): Whether to decode HTML entities in the injected HTML code. If set to `true`, HTML entities in the injected HTML code will be decoded. Default is `false`.
 
 ### Environment Variables Options (`envVariables`)
 

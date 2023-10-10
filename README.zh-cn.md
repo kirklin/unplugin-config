@@ -148,6 +148,7 @@ build({
 - `enable` (布尔值, 可选): 启用或禁用将配置注入到 HTML 文件中。默认为 `true`。
 - `templates` (字符串数组, 可选): 需要转换的模板文件的数组。
 - `position` (字符串, 可选): 将配置脚本注入到 HTML 文件的位置。可能的值为 `"head"`、`"body"`、`"head-prepend"` 或 `"body-prepend"`。默认为 `"head-prepend"`。
+- `decodeEntities`（布尔型，可选）：是否对注入的HTML代码进行HTML实体编码的解码。如果设置为 `true`，则注入的HTML代码中的HTML实体将被解码。默认值为 `false`。
 
 ### 环境变量选项 (`envVariables`)
 
