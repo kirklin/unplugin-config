@@ -35,6 +35,7 @@ export function addScriptToHtmlCode(htmlCode: string, scriptSrc: string, positio
   // Create a new script element
   const scriptElement = dom.window.document.createElement("script");
   scriptElement.src = scriptSrc;
+  scriptElement.type = "module";
 
   // Get the target element where the script tag should be inserted
   const targetElement = (position === "body" || position === "body-prepend")

@@ -1,7 +1,7 @@
 import process from "node:process";
 import path, { resolve } from "node:path";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import type { UnpluginFactory } from "unplugin";
+import type { UnpluginContextMeta, UnpluginFactory } from "unplugin";
 import { logger } from "@kirklin/logger";
 import dotenv from "dotenv";
 import type { BuildConfigOptions, Options } from "../types";
@@ -123,23 +123,43 @@ export function getEnvConfig(prefix = ENV_CONFIG_PREFIX, files = getEnvConfigFil
  * These configuration files may contain global variables that are customizable.
  *
  */
-export const unpluginFactory: UnpluginFactory<Options | undefined> = (options, meta) => {
+export const unpluginFactory: UnpluginFactory<Options | undefined> = (options, meta: UnpluginContextMeta) => {
   const { framework } = meta;
   const ENABLE_PLUGIN = options?.configFile?.generate ?? true;
+
+  const generateConfigFile = () => {
+    if (ENABLE_PLUGIN) {
+      runBuildConfig(options);
+    }
+    logger.info(`✨ [${options?.appName || APP_NAME}] - Build successfully!`);
+  };
+
+  const transformCode = (code: string) => {
+    const { baseDir, configFile, htmlInjection } = options || {};
+    const BASE_DIR = baseDir || OUTPUT_BASE_DIR;
+    const configFileName = (configFile && configFile.fileName) || GLOB_CONFIG_FILE_NAME;
+    const position = (htmlInjection && htmlInjection.position) || "head-prepend";
+    const shouldDecodeEntities = htmlInjection && htmlInjection.decodeEntities === true;
+
+    const getAppConfigSrc = () => `${BASE_DIR.endsWith("/") ? BASE_DIR : `${BASE_DIR}/`}${configFileName}`;
+    let updatedCode = addScriptToHtmlCode(code, getAppConfigSrc(), position);
+
+    if (shouldDecodeEntities) {
+      updatedCode = decodeHtmlEntities(updatedCode);
+    }
+
+    return updatedCode;
+  };
+
   return {
     name: PLUGIN_NAME,
+    vite: {
+      transformIndexHtml(html) {
+        return transformCode(html);
+      },
+    },
     writeBundle() {
-      try {
-        // Generate configuration file
-        if (ENABLE_PLUGIN) {
-          runBuildConfig(options);
-        }
-
-        logger.info(`✨ [${options?.appName || APP_NAME}] - Build successfully!`);
-      } catch (error) {
-        console.error(`[${PLUGIN_NAME}] Vite build error:\n${error instanceof Error ? error.message : String(error)}`);
-        process.exit(1);
-      }
+      generateConfigFile();
     },
     transformInclude(id: string) {
       const formatId = formatPath(id);
@@ -150,7 +170,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options, m
         }
         // WARN: Currently, webpack does not support directly injecting HTML in this way.
         // You may need an additional loader to handle the result of these loaders.
-        if (formatId.endsWith(".html") && framework !== "webpack") {
+        if (formatId.endsWith(".html") && framework !== "webpack" && framework !== "vite") {
           const covertTemplates
               = options?.htmlInjection?.templates?.map(template => formatPath(path.resolve(process.cwd(), template))) ?? [];
           if (!covertTemplates?.length || covertTemplates.includes(formatId)) {
@@ -161,27 +181,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options, m
       return shouldTransform;
     },
     transform(code: string) {
-      // Destructure options for cleaner code
-      const { baseDir, configFile, htmlInjection } = options || {};
-
-      // Default values
-      const BASE_DIR = baseDir || OUTPUT_BASE_DIR;
-      const configFileName = (configFile && configFile.fileName) || GLOB_CONFIG_FILE_NAME;
-      const position = (htmlInjection && htmlInjection.position) || "head-prepend";
-      const shouldDecodeEntities = htmlInjection && htmlInjection.decodeEntities === true;
-
-      // Define a function to get the script source
-      const getAppConfigSrc = () => `${BASE_DIR.endsWith("/") ? BASE_DIR : `${BASE_DIR}/`}${configFileName}`;
-
-      // Add JS script to the HTML code using the custom function
-      let updatedCode = addScriptToHtmlCode(code, getAppConfigSrc(), position);
-
-      // Decode HTML entities if specified
-      if (shouldDecodeEntities) {
-        updatedCode = decodeHtmlEntities(updatedCode);
-      }
-
-      return updatedCode;
+      return transformCode(code);
     },
   };
 };
