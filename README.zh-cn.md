@@ -160,6 +160,7 @@ build({
 ```javascript
 const configurationOptions = {
   appName: "MyApp",
+  baseDir: "/",
   configFile: {
     generate: true,
     fileName: "_app.config.js",

@@ -160,6 +160,7 @@ The `Options` object contains the following properties:
 ```javascript
 const configurationOptions = {
   appName: "MyApp",
+  baseDir: "/",
   configFile: {
     generate: true,
     fileName: "_app.config.js",
