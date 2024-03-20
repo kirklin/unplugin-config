@@ -5,7 +5,7 @@
     "build": "nodemon -w '../src/**/*.ts' -e .ts -x vite build"
   },
   "devDependencies": {
-    "vite": "^5.0.10",
-    "vite-plugin-inspect": "^0.8.1"
+    "vite": "^5.1.6",
+    "vite-plugin-inspect": "^0.8.3"
   }
 }
