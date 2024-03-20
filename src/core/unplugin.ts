@@ -154,6 +154,7 @@ export const unpluginFactory: UnpluginFactory<Options | undefined> = (options, m
   return {
     name: PLUGIN_NAME,
     vite: {
+      apply: "build",
       transformIndexHtml(html) {
         return transformCode(html);
       },
