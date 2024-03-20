@@ -14,7 +14,6 @@
 <br>
 </div>
 
-
 该工具可生成Web应用程序的配置文件，并允许对全局变量进行定制化，无需重新打包即可外部修改。该工具的特点包括:
 
 ##### 特点
@@ -64,7 +63,6 @@ export default {
 ```
 
 <br></details>
-
 
 <details>
 <summary>Webpack</summary><br>
@@ -181,7 +179,6 @@ const configurationOptions = {
 ## 案例
 
 [kirklin/celeris-admin](https://github.com/kirklin/celeris-admin)
-
 
 ## License
 

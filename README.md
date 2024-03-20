@@ -14,7 +14,6 @@
 <br>
 </div>
 
-
 A tool that generates configuration files for web applications, allowing customization of global variables that can be externally modified without the need for repackaging.
 
 ##### Features
@@ -64,7 +63,6 @@ export default {
 ```
 
 <br></details>
-
 
 <details>
 <summary>Webpack</summary><br>
@@ -178,11 +176,9 @@ const configurationOptions = {
 };
 ```
 
-
 ## Example
 
 [kirklin/celeris-admin](https://github.com/kirklin/celeris-admin)
-
 
 ## License
 
